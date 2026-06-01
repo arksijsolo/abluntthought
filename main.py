@@ -4,9 +4,13 @@ from fastapi import FastAPI, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 import requests
+from fastapi import FastAPI
+from routers import home, admin
+
+app = FastAPI(title="A Blunt Thought API Engine")
 
 from auth import check_login, create_session, destroy_session, verify_session
-from db import supabase
+from services.db import supabase
 
 app = FastAPI()
 
@@ -149,3 +153,10 @@ def delete(id: int, request: Request):
 
     return RedirectResponse("/admin", status_code=303)
 
+
+
+
+
+# Mount structural domain routers
+app.include_router(home.router)
+app.include_router(admin.router, prefix="/admin")
