@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Home - A Blunt Thought{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+    <!-- JUMBOTRON HERO SECTION -->
+    <div class="p-5 mb-5 bg-dark text-white rounded-3 shadow-sm position-relative overflow-hidden">
+        <div class="row align-items-center position-relative" style="z-index: 2;">
+            <div class="col-lg-8">
+                <span class="badge bg-success mb-2 px-3 py-2 text-uppercase tracking-wider fw-bold">Welcome to my space</span>
+                <h1 class="display-4 fw-bold">Raw Insights & Candid Code.</h1>
+                <p class="lead text-secondary">A space dedicated to documenting technical solutions, architecture debugging, and blunt developer thoughts without the corporate fluff.</p>
+                <a href="#articles" class="btn btn-success btn-lg mt-2 px-4"><i class="bi bi-arrow-down-circle me-2"></i>Read Articles</a>
+            </div>
+        </div>
+        <!-- Subtly styled background decoration elements -->
+        <div class="position-absolute end-0 bottom-0 opacity-10 text-success d-none d-md-block" style="font-size: 12rem; transform: translate(10%, 20%); pointer-events: none;">
+            <i class="bi bi-code-slash"></i>
+        </div>
+    </div>
+
+    <!-- MAIN RECENT ARTICLES GRID -->
+    <div id="articles" class="row g-4 mb-5">
+        <div class="col-12">
+            <h3 class="border-bottom pb-2 mb-4 d-flex align-items-center">
+                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>Recent Publications
+            </h3>
+        </div>
+
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 hover-shadow transition-all">
+                <!-- If your posts have an image block, parse it here, otherwise show standard default fallback -->
+                <div class="bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center border-bottom" style="height: 180px;">
+                    <i class="bi bi-journal-richtext" style="font-size: 3.5rem;"></i>
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold text-dark mb-2">{{ post.title }}</h5>
+                    
+                    <!-- Post Excerpt Mirror (Stripping HTML Tags from Quill output if necessary) -->
+                    <p class="card-text text-muted small flex-grow-1">
+                        {{ post.content | striptags | truncate(120) }}
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
+                        <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i> June 2026</span>
+                        <a href="/post/{{ post.slug }}" class="btn btn-outline-success btn-sm px-3 rounded-pill fw-medium">
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- EMPTY STATE FALLBACK CASE -->
+        <div class="col-12">
+            <div class="text-center py-5 bg-white rounded shadow-sm border border-dashed">
+                <i class="bi bi-folder-x text-muted display-1"></i>
+                <h4 class="mt-3 fw-bold text-secondary">No articles published yet</h4>
+                <p class="text-muted">Head back into the control system matrix to create your very first blog article block.</p>
+                <a href="/admin" class="btn btn-success px-4 mt-2"><i class="bi bi-plus-circle me-2"></i>Go to Dashboard</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Clean CSS Interaction Micro-animations */
+    .hover-shadow {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1) !important;
+    }
+</style>
+{% endblock %}
