@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from services.database import supabase
-from config import settings
+from core.config import settings
 from auth import check_login, create_session, destroy_session, verify_session
 
 router = APIRouter()

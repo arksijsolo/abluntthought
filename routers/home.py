@@ -2,8 +2,8 @@ import os
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from services.database import supabase
 from auth import verify_session
+from services.database import supabase
 
 router = APIRouter()
 
