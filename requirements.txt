@@ -2,3 +2,4 @@ flask
 pdfkit
 wkhtmltopdf
 cryptography
+vercel-kv
