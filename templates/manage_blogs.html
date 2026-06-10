@@ -1,141 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Workspace</title>
-    <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        html, body { height: 100%; margin: 0; padding: 0; }
-        body { background-color: #f4f6f9; display: flex; flex-direction: column; }
-        
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 40px 20px; flex: 1 0 auto; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
-        .nav-tabs { display: flex; gap: 5px; }
-        .nav-tabs a { text-decoration: none; color: #64748b; font-weight: 600; padding: 10px 20px; border-radius: 6px; transition: all 0.2s; }
-        .nav-tabs a:hover { background-color: #e2e8f0; color: #1e293b; }
-        .nav-tabs a.active { color: #0d6efd; background-color: #e0f2fe; }
-        
-        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 30px; width: 100%; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; color: #475569; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; }
-        input:focus, textarea:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15); }
-        
-        .btn { padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; text-decoration: none; font-size: 14px; display: inline-block; }
-        .btn-primary { background: #0d6efd; color: white; }
-        .btn-primary:hover { background: #0b5ed7; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-danger:hover { background: #bb2d3b; }
-        .btn-edit { background: #ffc107; color: #212529; margin-right: 10px; padding: 8px 15px; }
-        .btn-delete { background: #dc3545; color: white; padding: 8px 15px; }
-        
-        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 10px; border-bottom: 1px solid #f1f5f9; }
-        .blog-item:last-child { border-bottom: none; }
-        
-        @media (max-width: 768px) {
-            .container { padding: 20px 15px; }
-            .header { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .blog-item { flex-direction: column; align-items: flex-start; gap: 15px; }
-        }
+<meta charset="UTF-8">
+<title>Admin Portal</title>
 
-        .alert { padding: 14px; border-radius: 6px; margin-bottom: 25px; text-align: center; font-size: 15px; font-weight: 500; }
-        .alert-success { background: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-        .alert-danger { background: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
-        footer { background-color: #1e293b; padding: 20px; text-align: center; color: #94a3b8; font-size: 13px; flex-shrink: 0; width: 100%; }
-    </style>
+body {
+    margin: 0;
+    background: #f4f6f9;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 260px;
+    background: #111827;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: #cbd5e1;
+    text-decoration: none;
+    margin: 12px 0;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.sidebar a:hover {
+    background: #1f2937;
+    color: white;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.blog {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.blog h4 {
+    margin: 0;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.actions form {
+    display: inline;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+}
+</style>
+
 </head>
+
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2 style="margin:0; color: #1e293b;">Control Dashboard</h2>
-        <div class="nav-tabs">
-            <a href="/admin/blogs?tab=blogs" class="{% if active_tab == 'blogs' %}active{% endif %}">Blog Manager</a>
-            <a href="/admin/blogs?tab=security" class="{% if active_tab == 'security' %}active{% endif %}">Security Panel</a>
-            <a href="/admin/logout" style="color: #ef4444; margin-left: 10px;">Logout</a>
-        </div>
-    </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Admin Panel</h2>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    {% if active_tab == 'blogs' %}
-        <div class="card">
-            <h3 style="margin-top:0; margin-bottom: 20px; color:#1e293b;">Compose New Blog Post</h3>
-            <form action="/admin/blogs" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Blog Title</label>
-                    <input type="text" name="title" placeholder="Enter headline..." required>
-                </div>
-                <div class="form-group">
-                    <label>Cover Image (Optional)</label>
-                    <input type="file" name="image" accept="image/*" style="border: none; padding: 5px 0; background:none;">
-                </div>
-                <div class="form-group">
-                    <label>Article Body Content</label>
-                    <textarea name="content" rows="10" placeholder="Write your content..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Publish Post</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-top:0; margin-bottom: 20px; color:#1e293b;">Active Published Articles</h3>
-            {% if blogs %}
-                {% for blog in blogs %}
-                    <div class="blog-item">
-                        <span style="font-weight: 600; font-size:17px; color:#334155;">{{ blog.title }}</span>
-                        <div style="display: flex; align-items: center;">
-                            <a href="/admin/blogs/edit/{{ blog.id }}" class="btn btn-edit">Edit</a>
-                            <form action="/admin/blogs/delete/{{ blog.id }}" method="POST" onsubmit="return confirm('Delete this post permanently?');" style="margin: 0;">
-                                <button type="submit" class="btn btn-delete">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p style="color:#64748b; font-style:italic;">No blog entries published yet.</p>
-            {% endif %}
-        </div>
-
-    {% elif active_tab == 'security' %}
-        <div class="card">
-            <h3 style="margin-top:0; margin-bottom: 10px; color:#1e293b;">Update Admin Password</h3>
-            <p style="color:#64748b; font-size:14px; margin-bottom:25px;">Modify your local encrypted access key credentials. Changing credentials will safely terminate your session.</p>
-            
-            <form action="/admin/change-password" method="POST">
-                <div class="form-group">
-                    <label>Confirm Current Password</label>
-                    <input type="password" name="current_password" placeholder="••••••••" required>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 25px 0;">
-                <div class="form-group">
-                    <label>New Secure Password</label>
-                    <input type="password" name="new_password" placeholder="Enter new strong password" required>
-                </div>
-                <div class="form-group">
-                    <label>Confirm New Password</label>
-                    <input type="password" name="confirm_password" placeholder="Retype new password" required>
-                </div>
-                
-                <button type="submit" class="btn btn-danger">Update Password Credentials</button>
-            </form>
-        </div>
-    {% endif %}
-
+    <a href="#create">➕ Create Blog</a>
+    <a href="#blogs">📄 Manage Blogs</a>
+    <a href="/admin/logout">🚪 Logout</a>
 </div>
 
-<footer>
-    <div>Admin Control Dashboard &bull; Secure Local Encryption Protocol</div>
-</footer>
+<!-- MAIN -->
+<div class="main">
+
+    <!-- CREATE BLOG -->
+    <div class="card" id="create">
+        <h3>Create Blog</h3>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label>Content</label>
+                <textarea name="content" rows="6" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" name="image">
+            </div>
+
+            <button class="btn btn-primary" type="submit">Publish</button>
+        </form>
+    </div>
+
+    <!-- BLOG LIST -->
+    <div class="card" id="blogs">
+        <h3>All Blogs</h3>
+
+        {% for blog in blogs %}
+        <div class="blog">
+            <h4>{{ blog.title }}</h4>
+            <p>{{ blog.content[:120] }}...</p>
+
+            {% if blog.image %}
+                <img src="{{ blog.image }}" width="120">
+            {% endif %}
+
+            <div class="actions">
+                <a href="/admin/edit/{{ blog.id }}" class="btn btn-primary">Edit</a>
+
+                <form method="POST" action="/admin/delete/{{ blog.id }}">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
 
 </body>
 </html>
