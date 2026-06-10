@@ -1,81 +1,124 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Blog</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+        
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { background-color: #f8f9fa; display: flex; flex-direction: column; color: #333; }
+        
+        /* Navigation Header */
+        header { background-color: #ffffff; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); width: 100%; }
+        .nav-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 800; color: #0d6efd; text-decoration: none; }
+        .admin-link { color: #6c757d; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .admin-link:hover { color: #212529; }
 
-{% block title %}Home - A Blunt Thought{% endblock %}
+        /* Fluid Content Layout */
+        .main-layout { width: 100%; max-width: 1400px; margin: 40px auto; padding: 0 20px; flex: 1 0 auto; }
+        
+        h2.section-title { font-size: 28px; font-weight: 700; border-bottom: 3px solid #0d6efd; padding-bottom: 8px; margin-top: 0; margin-bottom: 35px; }
+        .blog-post { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 30px; width: 100%; }
+        .blog-title { margin-top: 0; font-size: 24px; color: #212529; font-weight: 700; }
+        
+        /* Text Content Blocks */
+        .blog-content { color: #495057; line-height: 1.7; font-size: 16px; }
+        .short-text { white-space: pre-wrap; display: block; }
+        .full-text { white-space: pre-wrap; display: none; } /* Hidden initially */
 
-{% block content %}
-<div class="container">
-    
-    <!-- JUMBOTRON HERO SECTION -->
-    <div class="p-5 mb-5 bg-dark text-white rounded-3 shadow-sm position-relative overflow-hidden">
-        <div class="row align-items-center position-relative" style="z-index: 2;">
-            <div class="col-lg-8">
-                <span class="badge bg-success mb-2 px-3 py-2 text-uppercase tracking-wider fw-bold">Welcome to my space</span>
-                <h1 class="display-4 fw-bold">Raw Insights & Candid Code.</h1>
-                <p class="lead text-secondary">A space dedicated to documenting technical solutions, architecture debugging, and blunt developer thoughts without the corporate fluff.</p>
-                <a href="#articles" class="btn btn-success btn-lg mt-2 px-4"><i class="bi bi-arrow-down-circle me-2"></i>Read Articles</a>
-            </div>
-        </div>
-        <!-- Subtly styled background decoration elements -->
-        <div class="position-absolute end-0 bottom-0 opacity-10 text-success d-none d-md-block" style="font-size: 12rem; transform: translate(10%, 20%); pointer-events: none;">
-            <i class="bi bi-code-slash"></i>
-        </div>
+        /* Expand Button Action Link */
+        .read-more-btn { display: inline-block; background: none; border: none; color: #0d6efd; font-weight: 600; font-size: 15px; padding: 0; margin-top: 10px; cursor: pointer; text-decoration: none; }
+        .read-more-btn:hover { color: #0b5ed7; text-decoration: underline; }
+
+        .blog-image { width: 100%; max-height: 500px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; }
+
+        @media (max-width: 768px) {
+            .nav-container, .main-layout { padding: 0 15px; }
+            .blog-post { padding: 20px; }
+            .blog-title { font-size: 20px; }
+            .blog-image { max-height: 300px; }
+        }
+
+        .alert { padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; text-align: center; font-weight: 500; }
+        .alert-success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .alert-danger { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+        .empty { color: #6c757d; font-style: italic; text-align: center; margin-top: 40px; }
+
+        footer { background-color: #ffffff; border-top: 1px solid #dee2e6; padding: 25px 20px; text-align: center; color: #6c757d; font-size: 14px; flex-shrink: 0; width: 100%; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="/" class="logo">My Blog</a>
+        <a href="/admin/login" class="admin-link">Admin Dashboard →</a>
     </div>
+</header>
 
-    <!-- MAIN RECENT ARTICLES GRID -->
-    <div id="articles" class="row g-4 mb-5">
-        <div class="col-12">
-            <h3 class="border-bottom pb-2 mb-4 d-flex align-items-center">
-                <i class="bi bi-lightning-charge-fill text-warning me-2"></i>Recent Publications
-            </h3>
-        </div>
+<div class="main-layout">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-        {% for post in posts %}
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm border-0 hover-shadow transition-all">
-                <!-- If your posts have an image block, parse it here, otherwise show standard default fallback -->
-                <div class="bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center border-bottom" style="height: 180px;">
-                    <i class="bi bi-journal-richtext" style="font-size: 3.5rem;"></i>
-                </div>
-                
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title fw-bold text-dark mb-2">{{ post.title }}</h5>
+    <main>
+        <h2 class="section-title">Latest Articles</h2>
+        {% if blogs %}
+            {% for blog in blogs %}
+                <div class="blog-post">
+                    {% if blog.image %}
+                        <img src="{{ blog.image }}" alt="Blog Image" class="blog-image">
+                    {% endif %}
+                    <h3 class="blog-title">{{ blog.title }}</h3>
                     
-                    <!-- Post Excerpt Mirror (Stripping HTML Tags from Quill output if necessary) -->
-                    <p class="card-text text-muted small flex-grow-1">
-                        {{ post.content | striptags | truncate(120) }}
-                    </p>
-                    
-                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
-                        <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i> June 2026</span>
-                        <a href="/post/{{ post.slug }}" class="btn btn-outline-success btn-sm px-3 rounded-pill fw-medium">
-                            Read More
-                        </a>
+                    <div class="blog-content">
+                        {% if blog.content|length > 250 %}
+                            <span class="short-text" id="short-{{ loop.index }}">{{ blog.content[:250] }}...</span>
+                            <span class="full-text" id="full-{{ loop.index }}">{{ blog.content }}</span>
+                            <button class="read-more-btn" id="btn-{{ loop.index }}" onclick="toggleContent('{{ loop.index }}')">Read More</button>
+                        {% else %}
+                            <span class="short-text">{{ blog.content }}</span>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-        </div>
+            {% endfor %}
         {% else %}
-        <!-- EMPTY STATE FALLBACK CASE -->
-        <div class="col-12">
-            <div class="text-center py-5 bg-white rounded shadow-sm border border-dashed">
-                <i class="bi bi-folder-x text-muted display-1"></i>
-                <h4 class="mt-3 fw-bold text-secondary">No articles published yet</h4>
-                <p class="text-muted">Head back into the control system matrix to create your very first blog article block.</p>
-                <a href="/admin" class="btn btn-success px-4 mt-2"><i class="bi bi-plus-circle me-2"></i>Go to Dashboard</a>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+            <p class="empty">No articles have been written yet. Check back later!</p>
+        {% endif %}
+    </main>
 </div>
 
-<style>
-    /* Clean CSS Interaction Micro-animations */
-    .hover-shadow {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+<footer>
+    <div>&copy; <span id="year"></span> My Blog. All rights reserved.</div>
+</footer>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // JavaScript to toggle visibility on click without full page loads
+    function toggleContent(id) {
+        var shortText = document.getElementById("short-" + id);
+        var fullText = document.getElementById("full-" + id);
+        var btnText = document.getElementById("btn-" + id);
+
+        if (shortText.style.display === "none") {
+            shortText.style.display = "block";
+            fullText.style.display = "none";
+            btnText.textContent = "Read More";
+        } else {
+            shortText.style.display = "none";
+            fullText.style.display = "block";
+            btnText.textContent = "Read Less";
+        }
     }
-    .hover-shadow:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1) !important;
-    }
-</style>
-{% endblock %}
+</script>
+
+</body>
+</html>
