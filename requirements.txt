@@ -1,3 +1,4 @@
 flask
 pdfkit
 wkhtmltopdf
+cryptography
