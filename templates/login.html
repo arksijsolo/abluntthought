@@ -3,71 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Blog</title>
+    <title>Admin Login</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-        
-        html, body { height: 100%; margin: 0; padding: 0; }
-        body { background-color: #f8f9fa; display: flex; flex-direction: column; color: #333; }
-        
-        /* Navigation Header */
-        header { background-color: #ffffff; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); width: 100%; }
-        .nav-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 22px; font-weight: 800; color: #0d6efd; text-decoration: none; }
-        .admin-link { color: #6c757d; text-decoration: none; font-size: 14px; font-weight: 500; }
-        .admin-link:hover { color: #212529; }
-
-        /* Fluid Content Layout */
-        .main-layout { width: 100%; max-width: 1400px; margin: 40px auto; padding: 0 20px; flex: 1 0 auto; }
-        
-        h2.section-title { font-size: 24px; font-weight: 700; color: #475569; padding-bottom: 8px; margin-top: 0; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        /* 📖 Sequential Article Wrapper */
-        .blog-post { background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 30px; width: 100%; display: none; }
-        .blog-post.active-topic { display: block; animation: fadeIn 0.4s ease-in-out; } /* Only active post is visible */
-        
-        .blog-title { margin-top: 0; font-size: 28px; color: #212529; font-weight: 800; line-height: 1.3; }
-        .blog-content { color: #334155; line-height: 1.8; white-space: pre-wrap; font-size: 17px; margin-top: 20px; }
-        .blog-image { width: 100%; max-height: 550px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; }
-
-        /* 🔄 Navigation Controls Area */
-        .flow-controls { display: flex; justify-content: flex-end; margin-top: 40px; padding-top: 20px; border-top: 1px solid #f1f5f9; }
-        .next-topic-btn { background-color: #0d6efd; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; display: inline-flex; align-items: center; gap: 8px; }
-        .next-topic-btn:hover { background-color: #0b5ed7; }
-        .next-topic-btn:active { transform: scale(0.98); }
-
-        /* Smooth tab transition animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .nav-container, .main-layout { padding: 0 15px; }
-            .blog-post { padding: 25px; }
-            .blog-title { font-size: 22px; }
-            .blog-image { max-height: 320px; }
-            .next-topic-btn { width: 100%; justify-content: center; }
-        }
-
-        .alert { padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; text-align: center; font-weight: 500; }
-        .alert-success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-        .alert-danger { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
-        .empty { color: #6c757d; font-style: italic; text-align: center; margin-top: 40px; }
-
-        footer { background-color: #ffffff; border-top: 1px solid #dee2e6; padding: 25px 20px; text-align: center; color: #6c757d; font-size: 14px; flex-shrink: 0; width: 100%; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f6f9; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); width: 100%; max-width: 420px; margin: 20px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; color: #475569; }
+        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; }
+        .btn-submit { width: 100%; padding: 12px; border: none; border-radius: 6px; background: #0d6efd; color: white; font-weight: 600; cursor: pointer; }
+        .alert { padding: 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-size: 14px; }
+        .alert-danger { background: #f8d7da; color: #842029; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="nav-container">
-        <a href="/" class="logo">My Blog</a>
-        <a href="/admin/login" class="admin-link">Admin Dashboard →</a>
-    </div>
-</header>
+<div class="login-card">
+    <h3 style="margin-top:0; text-align:center;">Admin Portal Login</h3>
 
-<div class="main-layout">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
@@ -76,73 +29,18 @@
       {% endif %}
     {% endwith %}
 
-    <main>
-        <h2 class="section-title" id="feed-header">Current Reading</h2>
-        
-        {% if blogs %}
-            {% for blog in blogs %}
-                <div class="blog-post {% if loop.first %}active-topic{% endif %}" id="topic-{{ loop.index }}" data-index="{{ loop.index }}">
-                    {% if blog.image %}
-                        <img src="{{ blog.image }}" alt="Blog Image" class="blog-image">
-                    {% endif %}
-                    <h3 class="blog-title">{{ blog.title }}</h3>
-                    <div class="blog-content">{{ blog.content }}</div>
-                    
-                    <div class="flow-controls">
-                        {% if loop.last %}
-                            <button class="next-topic-btn" onclick="goToNextTopic(true)">
-                                Restart Feed ↺
-                            </button>
-                        {% else %}
-                            <button class="next-topic-btn" onclick="goToNextTopic(false)">
-                                Next Topic &rarr;
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="empty">No articles have been written yet. Check back later!</p>
-        {% endif %}
-    </main>
+    <form action="/admin/login" method="POST">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-submit">Sign In Securely</button>
+    </form>
 </div>
-
-<footer>
-    <div>&copy; <span id="year"></span> My Blog. All rights reserved.</div>
-</footer>
-
-<script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Setup tracks the current active post position index globally
-    let currentTopicIndex = 1;
-    // Total count calculated directly from elements generated by template engine
-    const totalTopics = document.querySelectorAll('.blog-post').length;
-
-    function goToNextTopic(isLast) {
-        // Find current open card wrapper and clear active status
-        const currentCard = document.getElementById(`topic-${currentTopicIndex}`);
-        currentCard.classList.remove('active-topic');
-
-        if (isLast) {
-            // Loop back cleanly to the very first article if they finish the feed
-            currentTopicIndex = 1;
-        } else {
-            // Advance to the next card index element
-            currentTopicIndex++;
-        }
-
-        // Activate the new target topic element card container
-        const nextCard = document.getElementById(`topic-${currentTopicIndex}`);
-        nextCard.classList.add('active-topic');
-
-        // Smoothly scroll browser window focus back up to the top of the new article header
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
-</script>
 
 </body>
 </html>
