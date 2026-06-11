@@ -210,6 +210,44 @@ def delete(blog_id):
     return redirect(url_for("admin_dashboard"))
 
 
+
+
+
+# ======================
+# PASSWORD RESET
+# ======================
+
+@app.route("/admin/change-password", methods=["GET", "POST"])
+def change_password():
+
+    if request.method == "POST":
+
+        old_password = request.form.get("old_password")
+        new_password = request.form.get("new_password")
+
+        # Get current admin
+        admin = supabase.table("admin") \
+            .select("*") \
+            .eq("username", "admin") \
+            .single() \
+            .execute()
+
+        if admin.data["password"] != old_password:
+            flash("Old password is incorrect", "danger")
+            return redirect("/admin/change-password")
+
+        # Update password
+        supabase.table("admin") \
+            .update({"password": new_password}) \
+            .eq("username", "admin") \
+            .execute()
+
+        flash("Password updated successfully", "success")
+        return redirect("/admin/dashboard")
+
+    return render_template("change_password.html")
+
+
 # ======================
 # RUN APP
 # ======================
