@@ -29,11 +29,6 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret")
 
-# ======================
-# ADMIN CONFIG
-# ======================
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "Password123"
 
 
 # ======================
@@ -117,13 +112,34 @@ def index(page=1):
 # ======================
 # LOGIN
 # ======================
+
 @app.route("/admin/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
+
         username = request.form.get("username")
         password = request.form.get("password")
 
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        # fetch user from Supabase
+        response = supabase.table("admin") \
+            .select("*") \
+            .eq("username", username) \
+            .limit(1) \
+            .execute()
+
+        data = response.data
+
+        if not data:
+            flash("Invalid login")
+            return redirect(url_for("login"))
+
+        admin = data[0]
+
+        db_password = str(admin.get("password", "")).strip()
+        input_password = str(password).strip()
+
+        if db_password == input_password:
             session["admin_logged_in"] = True
             return redirect(url_for("admin_dashboard"))
 
@@ -131,7 +147,6 @@ def login():
         return redirect(url_for("login"))
 
     return render_template("login.html")
-
 
 # ======================
 # LOGOUT
