@@ -1,0 +1,12 @@
+<h2>Blog Settings</h2>
+
+<form method="POST">
+    <label>Posts per page</label>
+    <input type="number"
+           name="posts_per_page"
+           value="{{ current_value }}"
+           min="1"
+           max="50">
+
+    <button type="submit">Save</button>
+</form>

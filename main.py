@@ -7,20 +7,15 @@ from dotenv import load_dotenv
 from supabase import create_client
 
 # ======================
-# LOAD ENV (FIXED)
+# LOAD ENV
 # ======================
-load_dotenv(dotenv_path=".env")
+load_dotenv(".env")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# 🔥 DEBUG (REMOVE AFTER FIX)
-print("SUPABASE_URL:", SUPABASE_URL)
-print("SUPABASE_KEY:", "LOADED" if SUPABASE_KEY else None)
-
-# 🚨 SAFETY CHECK (prevents your error)
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise Exception("Missing SUPABASE_URL or SUPABASE_KEY in .env file")
+    raise Exception("Missing SUPABASE_URL or SUPABASE_KEY")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -31,18 +26,54 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_secret")
 
 # ======================
-# ADMIN (simple version)
+# ADMIN CONFIG
 # ======================
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "Password123"
+
+# ======================
+# HELPERS
+# ======================
+def get_setting(key, default=None):
+    result = supabase.table("settings") \
+        .select("setting_value") \
+        .eq("setting_key", key) \
+        .execute()
+
+    if result.data:
+        return result.data[0]["setting_value"]
+    return default
+
+
+def require_admin():
+    return session.get("admin_logged_in")
+
+
+# ======================
+# BEFORE REQUEST GUARD
+# ======================
+@app.before_request
+def admin_guard():
+    if request.path.startswith("/admin") and request.path != "/admin/login":
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("login"))
+
 
 # ======================
 # HOME PAGE
 # ======================
 @app.route("/")
 def index():
-    blogs = supabase.table("blogs").select("*").order("created_at", desc=True).execute().data
-    return render_template("index.html", blogs=blogs)
+    posts_per_page = int(get_setting("posts_per_page", 6))
+
+    blogs = supabase.table("blogs") \
+        .select("*") \
+        .order("created_at", desc=True) \
+        .limit(posts_per_page) \
+        .execute()
+
+    return render_template("index.html", blogs=blogs.data)
+
 
 # ======================
 # LOGIN
@@ -54,99 +85,74 @@ def login():
         password = request.form.get("password")
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-            session["admin"] = True
-            return redirect(url_for("dashboard"))
+            session["admin_logged_in"] = True
+            return redirect(url_for("admin_dashboard"))
 
         flash("Invalid login")
         return redirect(url_for("login"))
 
     return render_template("login.html")
 
-# ======================
-# DASHBOARD
-# ======================
-@app.route("/admin/blogs", methods=["GET", "POST"])
-def dashboard():
-    if not session.get("admin"):
-        return redirect(url_for("login"))
 
+# ======================
+# LOGOUT
+# ======================
+@app.route("/admin/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
+# ======================
+# ADMIN DASHBOARD (ONLY ONE)
+# ======================
+@app.route("/admin/dashboard", methods=["GET", "POST"])
+def admin_dashboard():
     if request.method == "POST":
-        title = request.form.get("title")
-        content = request.form.get("content")
-        image_file = request.files.get("image")
+        posts_per_page = request.form.get("posts_per_page")
 
-        if not title or not content:
-            flash("Title and content required")
-            return redirect(url_for("dashboard"))
+        supabase.table("settings").upsert({
+            "setting_key": "posts_per_page",
+            "setting_value": posts_per_page
+        }).execute()
 
-        image_data = None
+        flash("Settings updated successfully", "success")
+        return redirect(url_for("admin_dashboard"))
 
-        if image_file and image_file.filename:
-            encoded = base64.b64encode(image_file.read()).decode()
-            image_data = f"data:{image_file.content_type};base64,{encoded}"
+    posts_per_page = get_setting("posts_per_page", 6)
 
-        try:
-            response = supabase.table("blogs").insert({
-                "id": str(uuid.uuid4()),
-                "title": title,
-                "content": content,
-                "image": image_data
-            }).execute()
+    blogs = supabase.table("blogs") \
+        .select("*") \
+        .order("created_at", desc=True) \
+        .execute()
 
-            print("INSERT RESPONSE:", response)
+    return render_template(
+        "admin_dashboard.html",
+        posts_per_page=posts_per_page,
+        blogs=blogs.data
+    )
 
-        except Exception as e:
-            return f"Insert failed: {str(e)}", 500
-
-        return redirect(url_for("dashboard"))
-
-    blogs = supabase.table("blogs").select("*").order("created_at", desc=True).execute().data
-    return render_template("manage_blogs.html", blogs=blogs)
-# ======================
-# DELETE BLOG
-# ======================
-@app.route("/admin/delete/<blog_id>", methods=["POST"])
-def delete(blog_id):
-    if not session.get("admin"):
-        return redirect(url_for("login"))
-
-    supabase.table("blogs").delete().eq("id", blog_id).execute()
-    return redirect(url_for("dashboard"))
 
 # ======================
-# EDIT BLOG
+# Manage BLOG
 # ======================
-@app.route("/admin/edit/<blog_id>", methods=["GET", "POST"])
-def edit(blog_id):
-    if not session.get("admin"):
-        return redirect(url_for("login"))
 
-    blog = supabase.table("blogs").select("*").eq("id", blog_id).single().execute().data
+@app.route("/admin/posts")
+def admin_posts():
 
-    if request.method == "POST":
-        supabase.table("blogs").update({
-            "title": request.form.get("title"),
-            "content": request.form.get("content")
-        }).eq("id", blog_id).execute()
+    blogs = supabase.table("blogs") \
+        .select("*") \
+        .order("created_at", desc=True) \
+        .execute()
 
-        return redirect(url_for("dashboard"))
-
-    return render_template("edit_blog.html", blog=blog)
+    return render_template("admin_posts.html", blogs=blogs.data)
 
 
-
-
-
-
-
-
-
-
+# ======================
+# CREATE BLOG
+# ======================
 @app.route("/admin/blogs/create", methods=["GET", "POST"])
 def create_blog():
-    if not session.get("admin"):
-        return redirect("/admin/login")
-
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
@@ -158,7 +164,6 @@ def create_blog():
         image_data = None
 
         if image_file and image_file.filename:
-            import base64
             encoded = base64.b64encode(image_file.read()).decode()
             image_data = f"data:{image_file.content_type};base64,{encoded}"
 
@@ -169,20 +174,44 @@ def create_blog():
             "image": image_data
         }).execute()
 
-        return redirect("/admin/blogs")
+        return redirect(url_for("admin_dashboard"))
 
     return render_template("create_blog.html")
 
-# ======================
-# LOGOUT
-# ======================
-@app.route("/admin/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
 
 # ======================
-# RUN
+# EDIT BLOG
+# ======================
+@app.route("/admin/edit/<blog_id>", methods=["GET", "POST"])
+def edit(blog_id):
+    blog = supabase.table("blogs") \
+        .select("*") \
+        .eq("id", blog_id) \
+        .single() \
+        .execute().data
+
+    if request.method == "POST":
+        supabase.table("blogs").update({
+            "title": request.form.get("title"),
+            "content": request.form.get("content")
+        }).eq("id", blog_id).execute()
+
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template("edit_blog.html", blog=blog)
+
+
+# ======================
+# DELETE BLOG
+# ======================
+@app.route("/admin/delete/<blog_id>", methods=["POST"])
+def delete(blog_id):
+    supabase.table("blogs").delete().eq("id", blog_id).execute()
+    return redirect(url_for("admin_dashboard"))
+
+
+# ======================
+# RUN APP
 # ======================
 if __name__ == "__main__":
     app.run(debug=True)
