@@ -1,10 +1,14 @@
 import os
 import uuid
 import base64
-
+from flask import session
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from dotenv import load_dotenv
 from supabase import create_client
+
+
+
 
 # ======================
 # LOAD ENV
@@ -247,6 +251,30 @@ def change_password():
 
     return render_template("change_password.html")
 
+
+@app.before_request
+def session_timeout_check():
+
+    if "admin_logged_in" in session:
+
+        now = datetime.utcnow()
+
+        last_activity = session.get("last_activity")
+
+        # First time login
+        if last_activity is None:
+            session["last_activity"] = now.isoformat()
+            return
+
+        last_activity_time = datetime.fromisoformat(last_activity)
+
+        # Check inactivity (3 minutes = 180 sec)
+        if now - last_activity_time > timedelta(minutes=3):
+            session.clear()
+            return redirect("/admin/login")
+
+        # Update last activity time
+        session["last_activity"] = now.isoformat()
 
 # ======================
 # RUN APP
