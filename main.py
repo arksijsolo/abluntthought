@@ -32,8 +32,24 @@ app.secret_key = os.getenv("SECRET_KEY", "dev_secret")
 # ======================
 # ADMIN CONFIG
 # ======================
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "Password123"
+
+
+
+# ======================
+# SLUG APP
+# ======================
+@app.route("/blog/<slug>")
+def blog_detail(slug):
+
+    response = supabase.table("blogs") \
+        .select("*") \
+        .eq("slug", slug) \
+        .single() \
+        .execute()
+
+    blog = response.data
+
+    return render_template("blog_detail.html", blog=blog)
 
 # ======================
 # HELPERS
