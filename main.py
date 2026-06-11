@@ -66,18 +66,36 @@ def admin_guard():
 # ======================
 # HOME PAGE
 # ======================
+
 @app.route("/")
-def index():
+@app.route("/page/<int:page>")
+def index(page=1):
+
     posts_per_page = int(get_setting("posts_per_page", 6))
 
-    blogs = supabase.table("blogs") \
+    offset = (page - 1) * posts_per_page
+
+    response = supabase.table("blogs") \
         .select("*") \
         .order("created_at", desc=True) \
-        .limit(posts_per_page) \
+        .range(offset, offset + posts_per_page - 1) \
         .execute()
 
-    return render_template("index.html", blogs=blogs.data)
+    blogs = response.data
 
+    count_response = supabase.table("blogs") \
+        .select("*", count="exact") \
+        .execute()
+
+    total_posts = count_response.count or 0
+    total_pages = (total_posts + posts_per_page - 1) // posts_per_page
+
+    return render_template(
+        "index.html",
+        blogs=blogs,
+        page=page,
+        total_pages=total_pages
+    )
 
 # ======================
 # LOGIN
