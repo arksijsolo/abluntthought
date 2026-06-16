@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# Disallow admin panels or search results pages to save crawl budget
+Disallow: /admin/
+Disallow: /search/
+
+Sitemap: https://abluntthought.vercel.app/sitemap.xml
