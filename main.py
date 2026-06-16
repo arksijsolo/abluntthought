@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from dotenv import load_dotenv
 from supabase import create_client
+from flask import send_from_directory
 
 
 
@@ -325,6 +326,12 @@ def session_timeout_check():
 
         # Update last activity time
         session["last_activity"] = now.isoformat()
+
+
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml')
 
 # ======================
 # RUN APP
