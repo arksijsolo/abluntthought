@@ -8,3 +8,4 @@ supabase
 Flask
 python-dotenv
 gunicorn
+requests
