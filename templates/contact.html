@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Contact | MySite{% endblock %}
+{% block content %}
+  <section class="page">
+    <h1>Contact</h1>
+    <p>Have a question? Reach out below.</p>
+    <form class="contact-form" onsubmit="alert('This is a demo form — connect it to a backend or email service to make it functional.'); return false;">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </section>
+{% endblock %}
