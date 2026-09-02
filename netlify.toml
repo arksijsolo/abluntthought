@@ -4,3 +4,6 @@
 
 [build.environment]
   HUGO_VERSION = "0.150.0"
+
+[plugins]
+package = "@21yunbox/netlify-plugin-21yunbox-deploy-to-china-cdn"
