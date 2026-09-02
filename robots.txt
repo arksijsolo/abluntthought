@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin-dashboard.html
+Disallow: /login.html
+Allow: /
+
+Sitemap:https://ablunthought.netlify.app/sitemap.xml
