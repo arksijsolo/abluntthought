@@ -4,6 +4,3 @@
 
 [build.environment]
   HUGO_VERSION = "0.150.0"
-
-[[plugins]]
-package = "@netlify/plugin-lighthouse"
