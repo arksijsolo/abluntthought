@@ -1,6 +1,258 @@
-Welcome to abluntthought
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Blunt Thinking — Minimalist Nomad Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F8F6;
+            --text-color: #1F2022;
+            --muted-color: #686B73;
+            --accent-color: #C86D51;
+            --border-color: #E2E0DC;
+            --card-bg: #FFFFFF;
+        }
 
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #E3E3E3;
+            --muted-color: #A0A3AE;
+            --accent-color: #D9826B;
+            --border-color: #2D2E32;
+            --card-bg: #1A1B1E;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            font-size: 16px;
+        }
 
-<h1>Dhan Kumari  </h1>
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--muted-color);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--text-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .hero-post {
+            margin-bottom: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta {
+            font-size: 0.85rem;
+            color: var(--muted-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .meta span.tag {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .hero-post h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .hero-post h1 a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .hero-post h1 a:hover {
+            color: var(--accent-color);
+        }
+
+        .excerpt {
+            color: var(--muted-color);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 2px;
+        }
+
+        .post-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .post-card h2 {
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+
+        .post-card h2 a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .post-card h2 a:hover {
+            color: var(--accent-color);
+        }
+
+        footer {
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--muted-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .hero-post h1 {
+                font-size: 2rem;
+            }
+            nav {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="container">
+        <header>
+            <a href="#" class="logo">A Blunt Thinking</a>
+            <nav>
+                <a href="#">Articles</a>
+                <a href="#">About</a>
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">Dark</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero-post">
+                <div class="meta">
+                    <span class="tag">Reflections</span>
+                    <span>•</span>
+                    <span>4 min read</span>
+                </div>
+                <h1><a href="#">Simplicity as a Strategy for Sustainable Systems</a></h1>
+                <p class="excerpt">In both software architecture and daily routines, complexity accumulates invisibly. Here is how paring back to fundamentals improves performance and resilience.</p>
+                <a href="#" class="read-more">Read Article</a>
+            </section>
+
+            <div class="post-feed">
+                <article class="post-card">
+                    <div class="meta">
+                        <span class="tag">Engineering</span>
+                        <span>•</span>
+                        <span>May 14, 2026</span>
+                    </div>
+                    <h2><a href="#">Database Replication Patterns for High-Availability Environments</a></h2>
+                    <p class="excerpt">A practical breakdown of asynchronous versus synchronous replication pipelines and fault recovery strategies.</p>
+                </article>
+
+                <article class="post-card">
+                    <div class="meta">
+                        <span class="tag">Journeys</span>
+                        <span>•</span>
+                        <span>April 29, 2026</span>
+                    </div>
+                    <h2><a href="#">Quiet Valleys: Notes From the Eastern Himalaya</a></h2>
+                    <p class="excerpt">Meditations on mountain fog, winding footpaths, and the slow pace of rural life away from automated alerts.</p>
+                </article>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 A Blunt Thinking. All rights reserved.</p>
+            <p>Minimalist Nomad Theme</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const toggleBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                toggleBtn.textContent = 'Light';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                toggleBtn.textContent = 'Dark';
+            }
+        }
+    </script>
+</body>
+</html>
