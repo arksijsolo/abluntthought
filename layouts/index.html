@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #F9F8F6;
@@ -70,7 +71,7 @@
         nav {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 20px;
         }
 
         nav a {
@@ -84,6 +85,12 @@
             color: var(--text-color);
         }
 
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .theme-toggle {
             background: none;
             border: 1px solid var(--border-color);
@@ -92,6 +99,60 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.85rem;
+        }
+
+        /* Language Dropdown Styling */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--card-bg);
+            min-width: 130px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            z-index: 10;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .dropdown-content button {
+            color: var(--text-color);
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-content button:hover {
+            background-color: var(--border-color);
+        }
+
+        .dropdown.show .dropdown-content {
+            display: block;
         }
 
         .hero-post {
@@ -108,6 +169,7 @@
             margin-bottom: 12px;
             display: flex;
             gap: 12px;
+            align-items: center;
         }
 
         .meta span.tag {
@@ -185,6 +247,11 @@
             nav {
                 gap: 12px;
             }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
         }
     </style>
 </head>
@@ -192,55 +259,147 @@
 
     <div class="container">
         <header>
-            <a href="#" class="logo">A Blunt Thinking</a>
+            <a href="#" class="logo" data-i18n="logo">A Blunt Thinking</a>
             <nav>
-                <a href="#">Articles</a>
-                <a href="#">About</a>
-                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">Dark</button>
+                <a href="#" data-i18n="nav_articles">Articles</a>
+                <a href="#" data-i18n="nav_about">About</a>
+                <div class="controls-wrapper">
+                    <div class="dropdown" id="langDropdown">
+                        <button class="lang-btn" onclick="toggleLangDropdown()">
+                            <i class="fa-solid fa-globe"></i> <span id="current-lang-label">EN</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <button type="button" onclick="setLanguage('en')">English (EN)</button>
+                            <button type="button" onclick="setLanguage('es')">Español (ES)</button>
+                            <button type="button" onclick="setLanguage('hi')">हिन्दी (HI)</button>
+                            <button type="button" onclick="setLanguage('dz')">རྫོང་ཁ (DZ)</button>
+                        </div>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">Dark</button>
+                </div>
             </nav>
         </header>
 
         <main>
             <section class="hero-post">
                 <div class="meta">
-                    <span class="tag">Reflections</span>
+                    <span class="tag" data-i18n="hero_tag">Reflections</span>
                     <span>•</span>
-                    <span>4 min read</span>
+                    <span data-i18n="hero_read_time">4 min read</span>
                 </div>
-                <h1><a href="#">Simplicity as a Strategy for Sustainable Systems</a></h1>
-                <p class="excerpt">In both software architecture and daily routines, complexity accumulates invisibly. Here is how paring back to fundamentals improves performance and resilience.</p>
-                <a href="#" class="read-more">Read Article</a>
+                <h1><a href="#" data-i18n="hero_title">Simplicity as a Strategy for Sustainable Systems</a></h1>
+                <p class="excerpt" data-i18n="hero_excerpt">In both software architecture and daily routines, complexity accumulates invisibly. Here is how paring back to fundamentals improves performance and resilience.</p>
+                <a href="#" class="read-more" data-i18n="read_article">Read Article</a>
             </section>
 
             <div class="post-feed">
                 <article class="post-card">
                     <div class="meta">
-                        <span class="tag">Engineering</span>
+                        <span class="tag" data-i18n="post1_tag">Engineering</span>
                         <span>•</span>
-                        <span>May 14, 2026</span>
+                        <span data-i18n="post1_date">May 14, 2026</span>
                     </div>
-                    <h2><a href="#">Database Replication Patterns for High-Availability Environments</a></h2>
-                    <p class="excerpt">A practical breakdown of asynchronous versus synchronous replication pipelines and fault recovery strategies.</p>
+                    <h2><a href="#" data-i18n="post1_title">Database Replication Patterns for High-Availability Environments</a></h2>
+                    <p class="excerpt" data-i18n="post1_excerpt">A practical breakdown of asynchronous versus synchronous replication pipelines and fault recovery strategies.</p>
                 </article>
 
                 <article class="post-card">
                     <div class="meta">
-                        <span class="tag">Journeys</span>
+                        <span class="tag" data-i18n="post2_tag">Journeys</span>
                         <span>•</span>
-                        <span>April 29, 2026</span>
+                        <span data-i18n="post2_date">April 29, 2026</span>
                     </div>
-                    <h2><a href="#">Quiet Valleys: Notes From the Eastern Himalaya</a></h2>
-                    <p class="excerpt">Meditations on mountain fog, winding footpaths, and the slow pace of rural life away from automated alerts.</p>
+                    <h2><a href="#" data-i18n="post2_title">Quiet Valleys: Notes From the Eastern Himalaya</a></h2>
+                    <p class="excerpt" data-i18n="post2_excerpt">Meditations on mountain fog, winding footpaths, and the slow pace of rural life away from automated alerts.</p>
                 </article>
             </div>
         </main>
 
         <footer>
-            <p>&copy; 2026 Abluntthinking. All rights reserved.</p>
+            <p data-i18n="footer_copy">&copy; 2026 Abluntthinking. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
+        const translations = {
+            en: {
+                logo: "A Blunt Thinking",
+                nav_articles: "Articles",
+                nav_about: "About",
+                hero_tag: "Reflections",
+                hero_read_time: "4 min read",
+                hero_title: "Simplicity as a Strategy for Sustainable Systems",
+                hero_excerpt: "In both software architecture and daily routines, complexity accumulates invisibly. Here is how paring back to fundamentals improves performance and resilience.",
+                read_article: "Read Article",
+                post1_tag: "Engineering",
+                post1_date: "May 14, 2026",
+                post1_title: "Database Replication Patterns for High-Availability Environments",
+                post1_excerpt: "A practical breakdown of asynchronous versus synchronous replication pipelines and fault recovery strategies.",
+                post2_tag: "Journeys",
+                post2_date: "April 29, 2026",
+                post2_title: "Quiet Valleys: Notes From the Eastern Himalaya",
+                post2_excerpt: "Meditations on mountain fog, winding footpaths, and the slow pace of rural life away from automated alerts.",
+                footer_copy: "© 2026 Abluntthinking. All rights reserved."
+            },
+            es: {
+                logo: "A Blunt Thinking",
+                nav_articles: "Artículos",
+                nav_about: "Acerca de",
+                hero_tag: "Reflexiones",
+                hero_read_time: "Lectura de 4 min",
+                hero_title: "La simplicidad como estrategia para sistemas sostenibles",
+                hero_excerpt: "Tanto en la arquitectura de software como en las rutinas diarias, la complejidad se acumula invisiblemente. Así es como volver a lo fundamental mejora el rendimiento y la resiliencia.",
+                read_article: "Leer artículo",
+                post1_tag: "Ingeniería",
+                post1_date: "14 de mayo de 2026",
+                post1_title: "Patrones de replicación de bases de datos para entornos de alta disponibilidad",
+                post1_excerpt: "Un desglose práctico de los flujos de replicación asíncrona frente a síncrona y estrategias de recuperación de fallos.",
+                post2_tag: "Viajes",
+                post2_date: "29 de abril de 2026",
+                post2_title: "Valles tranquilos: Notas desde el Himalaya oriental",
+                post2_excerpt: "Meditaciones sobre la niebla de la montaña, los senderos sinuosos y el ritmo lento de la vida rural lejos de las alertas automatizadas.",
+                footer_copy: "© 2026 Abluntthinking. Todos los derechos reservados."
+            },
+            hi: {
+                logo: "A Blunt Thinking",
+                nav_articles: "लेख",
+                nav_about: "परिचय",
+                hero_tag: "विचार",
+                hero_read_time: "4 मिनट पढ़ने का समय",
+                hero_title: "सतत प्रणालियों के लिए एक रणनीति के रूप में सादगी",
+                hero_excerpt: "सॉफ्टवेयर आर्किटेक्चर और दैनिक दिनचर्या दोनों में, जटिलता अदृश्य रूप से जमा होती है। बुनियादी बातों पर वापस जाना प्रदर्शन और लचीलेपन में कैसे सुधार करता है, यहाँ बताया गया है।",
+                read_article: "लेख पढ़ें",
+                post1_tag: "अभियांत्रिकी",
+                post1_date: "14 मई, 2026",
+                post1_title: "उच्च-उपलब्धता वातावरण के लिए डेटाबेस प्रतिकृति पैटर्न",
+                post1_excerpt: "असमकालिक बनाम समकालिक प्रतिकृति पाइपलाइनों और दोष पुनर्प्राप्ति रणनीतियों का एक व्यावहारिक विवरण।",
+                post2_tag: "यात्राएं",
+                post2_date: "29 अप्रैल, 2026",
+                post2_title: "शांत घाटियाँ: पूर्वी हिमालय से नोट्स",
+                post2_excerpt: "पहाड़ी कोहरे, घुमावदार रास्तों और स्वचालित अलर्ट से दूर ग्रामीण जीवन की धीमी गति पर ध्यान।",
+                footer_copy: "© 2026 Abluntthinking। सर्वाधिकार सुरक्षित।"
+            },
+            dz: {
+                logo: "A Blunt Thinking",
+                nav_articles: "རྩོམ་ཡིག།",
+                nav_about: "སྐོར།",
+                hero_tag: "བསམ་གཞིག།",
+                hero_read_time: "སྐར་མ་ ༤ གི་ལྷག་ཚད།",
+                hero_title: "རྒྱུན་གནས་ལམ་ལུགས་ཀྱི་དོན་ལུ་འཇམ་སྤྲོས་ཀྱི་འཆར་གཞི།",
+                hero_excerpt: "མཉེན་ཆེའི་བཟོ་བཀོད་དང་ཉིན་བསྟར་གྱི་འཚོ་བའི་ནང་ རྙོག་འཛིང་ཚུ་མཐོང་མ་ཚུགས་པར་སྤུངས་དོ་ཡོད། གཞི་རྩ་ལུ་ལོག་ཐབས་ལས་ལས་འགན་དང་བཟོད་སྲན་ཡར་དྲག་གཏོངམ་ཨིན།",
+                read_article: "རྩོམ་ཡིག་ལྷག",
+                post1_tag: "བཟོ་རིག་པ།",
+                post1_date: "སྤྱི་ཟླ་ ༥ པའི་ཚེས་ ༡༤། ༢༠༢༦",
+                post1_title: "མཐོ་བའི་ནུས་ལྡན་མحيཊ་ཁོར་ཡུག་དོན་ལུ་གནས་སྡུད་འདྲ་བཤུས་བཟོ་ཐབས།",
+                post1_excerpt: "དུས་མིན་དང་དུས་མཉམ་འདྲ་བཤུས་རྒྱུན་ཐག་དང་སྐྱོན་སོལ་ཐབས་ཇུས་ཀྱི་དབྱེ་ཕྲལ།",
+                post2_tag: "འགྲུལ་སྐྱོད།",
+                post2_date: "སྤྱི་ཟླ་ ༤ པའི་ཚེས་ ༢༩། ༢༠༢༦",
+                post2_title: "ཁ་སྦུག་ཁམས་བཟང་། ཤར་ཧི་མ་ལ་ཡ་ལས་ཟིན་བྲིས།",
+                post2_excerpt: "རི་ཁྲོད་ཀྱི་མུན་པ་དང་འཁྱོག་འཁྱོག་གི་ལམ་ཕྲན་ དེ་ལས་རང་བཞིན་འཕྲིན་བརྡ་མེད་པའི་གྲོང་གསེབ་ཀྱི་འཚོ་བ་ལྷོད་ཆ་ཅན་གྱི་བསམ་གཞིག",
+                footer_copy: "© 2026 Abluntthinking. དབང་ཆ་ཡོངས་རྫོགས་ཡོད།"
+            }
+        };
+
         function toggleTheme() {
             const body = document.body;
             const toggleBtn = document.getElementById('themeToggle');
@@ -252,6 +411,43 @@
                 toggleBtn.textContent = 'Dark';
             }
         }
+
+        function toggleLangDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.closest('#langDropdown')) {
+                const dropdowns = document.getElementsByClassName("dropdown");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            document.getElementById('current-lang-label').innerText = lang.toUpperCase();
+            localStorage.setItem('preferred_lang', lang);
+            toggleLangDropdown();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred_lang') || 'en';
+            setLanguage(savedLang);
+        });
     </script>
 </body>
 </html>
